@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moon Phase</title>
+    <style>
+      body {
+        background-color: #333;
+        color: #ccc;
+        font-family: 'Consolas', monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+      }
+    </style>
+    <link id="favicon" rel="icon" href="">
+  </head>
+  <script>
+    const NEW_MOON_JD = 2451550.1;
+    const UNIX_EPOCH_JD = 2440587.5;
+    const CYCLE = 29.53059;
+    const PART = CYCLE / 16;
+    const PHASES = [
+      { icon: '🌑', size: 1, name: 'New Moon' },
+      { icon: '🌒', size: 3, name: 'Waxing Crescent' },
+      { icon: '🌓', size: 5, name: 'First Quarter' },
+      { icon: '🌔', size: 7, name: 'Waxing Gibbous' },
+      { icon: '🌕', size: 9, name: 'Full Moon' },
+      { icon: '🌖', size: 11, name: 'Waning Gibbous' },
+      { icon: '🌗', size: 13, name: 'Last Quarter' },
+      { icon: '🌘', size: 15, name: 'Waning Crescent' },
+      { icon: '🌑', size: 16, name: 'Old Moon' }
+    ];
+    const daysSinceEpoch = (new Date().getTime() / 86400000);
+    const julianDate = daysSinceEpoch + UNIX_EPOCH_JD;
+    const currentMoonAge = (julianDate - NEW_MOON_JD) % CYCLE;
+    const phase = PHASES.filter(p => currentMoonAge / PART < p.size)[0];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const emoji = document.createElement('div');
+      emoji.textContent = phase.icon;
+      emoji.style.fontSize = '100px';
+
+      const phaseName = document.createElement('div');
+      phaseName.textContent = phase.name;
+      phaseName.style.fontSize = '24px';
+
+      const moonAge = document.createElement('div');
+      moonAge.textContent = `Moon Age: ${currentMoonAge.toFixed(2)} days`;
+      moonAge.style.fontSize = '18px';
+
+      document.body.appendChild(emoji);
+      document.body.appendChild(phaseName);
+      document.body.appendChild(moonAge);
+
+      const favicon = document.getElementById('favicon');
+      favicon.href = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${phase.icon}</text></svg>`;
+    });
+  </script>
+</html>
